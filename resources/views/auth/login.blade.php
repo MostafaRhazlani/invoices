@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('title')
+تسجيل الدخول - برنامج الفواتبر
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
