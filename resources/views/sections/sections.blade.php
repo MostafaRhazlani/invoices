@@ -65,12 +65,15 @@
 											</tr>
 										</thead>
 										<tbody>
+										<?php $i = 0; ?>
+										@foreach ($sections as $section)
+										<?php $i++; ?>
 											<tr>
-												<td>1</td>
-												<td>200001</td>
-												<td>2023/09/1</td>
-												<td>2023/09/20</td>
+												<td>{{ $i }}</td>
+												<td>{{ $section->section_name }}</td>
+												<td>{{ $section->description }}</td>
 											</tr>
+										@endforeach
 										</tbody>
 									</table>
 								</div>
