@@ -25,26 +25,18 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
+
+				@if ($errors->any())
+				<div class="alert alert-danger">
+						<ul>
+								@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+								@endforeach
+						</ul>
+				</div>
+				@endif
 				<!-- row -->
 				<div class="row">
-
-					@if (session()->has('Add'))
-						<div class="alert alert-success alert-dismissible fade show" role="alert">
-							<strong>{{ session()->get('Add'); }}</strong>
-							<button class="close" type="button" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-					@endif
-
-					@if (session()->has('Error'))
-						<div class="alert alert-danger alert-dismissible fade show" role="alert">
-							<strong>{{ session()->get('Error'); }}</strong>
-							<button class="close" type="button" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-					@endif
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
