@@ -13,7 +13,7 @@ class SectionController extends Controller
      */
     public function index()
     {
-        $sections = section::all();
+        $sections = Section::all();
         return view('sections.sections', compact('sections'));
     }
 
@@ -39,6 +39,9 @@ class SectionController extends Controller
             'section_name.unique' => 'اسم القسم مسجل مسبقا',
             'description.required' => 'يرجى ادخال البيانات',
         ]);
+        
+        session()->flash('Add', 'تم اضافة القسم بنجاح');
+        return redirect('/sections');
     }
 
     /**
@@ -60,16 +63,38 @@ class SectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, section $section)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $this->validate($request, [
+            'section_name' => 'required|max:255|unique:sections,section_name', $id,
+            'description' => 'required',
+        ],[
+            'section_name.required' => 'يرجى ادخال اسم القسم',
+            'section_name.unique' => 'اسم القسم مسجل مسبقا',
+            'description.required' => 'يرجى ادخال البيانات',
+        ]);
+
+        $sections = Section::find($id);
+        $sections->update([
+            'section_name' => $request->section_name,
+            'description' => $request->description,
+        ]);
+
+        session()->flash('Edit','تم تعديل القسم بنجاج');
+        return redirect('/sections');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(section $section)
+    public function destroy( Request $request)
     {
-        //
+        $id = $request->id;
+
+        Section::find($id)->delete();
+        session()->flash('Delete','تم حذف القسم بنجاح');
+        return redirect('/sections');
     }
 }
