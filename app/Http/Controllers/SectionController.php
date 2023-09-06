@@ -39,6 +39,12 @@ class SectionController extends Controller
             'section_name.unique' => 'اسم القسم مسجل مسبقا',
             'description.required' => 'يرجى ادخال البيانات',
         ]);
+
+        Section::create([
+            'section_name' => $request->section_name,
+            'description' => $request->description,
+            'created_by' => Auth::user()->name,
+        ]);
         
         session()->flash('Add', 'تم اضافة القسم بنجاح');
         return redirect('/sections');
