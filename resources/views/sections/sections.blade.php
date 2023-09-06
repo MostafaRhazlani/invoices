@@ -68,10 +68,10 @@
 			<!--div-->
 			<div class="col-xl-12">
 				<div class="card mg-b-20">
-					<div class="card-header pb-0 d-flex">
+					<div class="card-header pb-0">
 							<div class="">
-									<a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
-											data-toggle="modal" href="#modaldemo8">اضافة قسم</a>
+									<a class="modal-effect btn btn-primary-gradient btn-block w-25" data-effect="effect-scale"
+											data-toggle="modal" href="#modaldemo8"><i class="fas fa-plus"></i>&nbsp; اضافة قسم</a>
 							</div>
 					</div>
 					<div class="card-body">
