@@ -126,7 +126,7 @@
 							</button>
 						</div>
 						<form action="{{ route('sections.store') }}" method="post">
-							{{ csrf_field() }}
+							@csrf
 							<div class="modal-body">
 								<div class="form-group">
 									<label for="section_name">اسم القسم</label>
