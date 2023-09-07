@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\invoice;
+use App\Models\Invoice;
+use App\Models\Invoice_attachments;
+use App\Models\Invoice_details;
+use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
@@ -20,7 +25,8 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        $sections = Section::all();
+        return view('invoices.add_invoice', compact('sections'));
     }
 
     /**
@@ -28,7 +34,89 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // return $request;
+        $validateData = $request->validate([
+            'invoice_number' => 'required|max:255',
+            'due_date' => 'required',
+            'section' => 'required',
+            'amount_collection' => 'required',
+            'amount_commission' => 'required',
+            'discount' => 'required',
+            'rate_vat' => 'required',
+        ],[
+            'invoice_number.required' => 'يرجى ادخال اسم الفاتورة',
+            'due_date.required' => 'يرجى تحديد تاريخ الاستحقاق',
+            'section.required' => 'يرجى تحديد القسم',
+            'amount_collection.required' => 'يرجى ادخال مبلغ التحصيل',
+            'amount_commission.required' => 'يرجى ادخال مبلغ العمولة',
+            'discount.required' => 'يرجى ادخال الخصم',
+            'rate_vat.required' => 'يرجى تحديد نسبة ضريبة القيمة المضافة',
+        ]);
+
+        Invoice::create([
+            'invoice_number' => $request->invoice_number,
+            'invoice_date' => $request->invoice_date,
+            'due_date' => $request->due_date,
+            'section_id' => $request->section,
+            'product' => $request->product,
+            'amount_collection' => $request->amount_collection,
+            'amount_commission' => $request->amount_commission,
+            'discount' => $request->discount,
+            'rate_vat' => $request->rate_vat,
+            'value_vat' => $request->value_vat,
+            'total' => $request->total,
+            'status' => 'غير مدفوعة',
+            'value_status' => 2,
+            'note' => $request->note,
+            
+        ]);
+
+        $invoice_id = Invoice::latest()->first()->id;
+
+        Invoice_details::create([
+            'id_invoice' => $invoice_id,
+            'invoice_number' => $request->invoice_number,
+            'product' => $request->product,
+            'section' => $request->section,
+            'status' => 'غير مدفوعة',
+            'value_status' => 2,
+            'note' => $request->note,
+            'user' => Auth::user()->name,
+        ]);
+
+        if ($request->hasFile('pic')) {
+
+            $this->validate($request, [
+                'pic' => 'required|mimes:pdf,jpeg,png|max:1000',
+                'pic' => 'mimes:pdf',
+                'pic' => 'mimes:jpeg',
+                'pic' => 'mimes:png',
+                'pic' => 'mimes:jpg',
+            ],[
+                'pic.mimes' => 'خطأ : صيغة الملف غير مدعومة',
+            ]);
+
+            $invoice_id = Invoice::latest()->first()->id;
+            $image = $request->file('pic');
+            $fileName = $image->getClientOriginalName();
+            $invoice_number = $request->invoice_number;
+
+            $attachments = new Invoice_attachments();
+            $attachments->file_name = $fileName;
+            $attachments->invoice_number = $invoice_number;
+            $attachments->created_by = Auth::user()->name;
+            $attachments->invoice_id = $invoice_id;
+
+            $attachments->save();
+
+            // move pic
+            $imageName = $request->pic->getClientOriginalName();
+            $request->pic->move(public_path('Attachments/'. $invoice_number), $imageName);
+
+            session()->flash('Add', 'تم اضافة الفاتورة بنجاح');
+            return back();
+        }
+
     }
 
     /**
@@ -61,5 +149,11 @@ class InvoiceController extends Controller
     public function destroy(invoice $invoice)
     {
         //
+    }
+
+    public function getProducts($id)
+    {
+        $products = DB::table('products')->where('section_id', $id)->pluck('product_name', 'id');
+        return json_encode($products);
     }
 }
