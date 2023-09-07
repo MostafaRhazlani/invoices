@@ -32,10 +32,9 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">Bordered Table</h4>
-									<i class="mdi mdi-dots-horizontal text-gray"></i>
+									<a class="btn btn-primary-gradient btn-block w-25" 
+										 href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
 								</div>
-								<p class="tx-12 tx-gray-500 mb-2">Example of Valex Bordered Table.. <a href="">Learn more</a></p>
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
