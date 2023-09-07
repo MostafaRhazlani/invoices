@@ -33,11 +33,9 @@ class SectionController extends Controller
 
         $validatedData = $request->validate([
             'section_name' => 'required|unique:sections|max:255',
-            'description' => 'required',
         ],[
             'section_name.required' => 'يرجى ادخال اسم القسم',
             'section_name.unique' => 'اسم القسم مسجل مسبقا',
-            'description.required' => 'يرجى ادخال البيانات',
         ]);
 
         Section::create([
@@ -74,12 +72,10 @@ class SectionController extends Controller
         $id = $request->id;
 
         $this->validate($request, [
-            'section_name' => 'required|max:255|unique:sections,section_name', $id,
-            'description' => 'required',
+            'section_name' => 'required|max:255|unique:sections,section_name,'. $id,
         ],[
             'section_name.required' => 'يرجى ادخال اسم القسم',
             'section_name.unique' => 'اسم القسم مسجل مسبقا',
-            'description.required' => 'يرجى ادخال البيانات',
         ]);
 
         $sections = Section::find($id);
