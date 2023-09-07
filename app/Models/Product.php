@@ -9,9 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'product_name',
-        'description',
-        'section_id',
-    ];
+    protected $guarded = [];
+
+    public function section() {
+        return $this->belongsTo(Section::class);
+    }
 }

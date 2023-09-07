@@ -45,6 +45,24 @@
 		</div>
 	@endif
 
+	@if(session()->has('Edit'))
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<strong>{{ session()->get('Edit') }}</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	@endif
+
+	@if(session()->has('Delete'))
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<strong>{{ session()->get('Delete') }}</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	@endif
+
 			<!-- row -->
 			<div class="row">
 				<!--div-->
@@ -68,13 +86,32 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>1</td>
-											<td>200001</td>
-											<td>2023/09/1</td>
-											<td>2023/09/20</td>
-											<td>CC</td>
-										</tr>
+										<?php $i = 0; ?>
+										@foreach ($products as $product)
+										<?php $i++; ?>
+											<tr>
+												<td>{{ $i }}</td>
+												<td>{{ $product->product_name }}</td>
+												<td>{{ $product->section->section_name }}</td>
+												<td>{{ $product->description }}</td>
+												<td>
+													<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+														data-product_name="{{ $product->product_name }}" 
+														data-pro_id="{{ $product->id }}" 
+														data-section_name="{{ $product->section->section_name }}"
+														data-description="{{ $product->description }}" data-toggle="modal"
+														href="#exampleModal2" title="تعديل"><i class="las la-pen"></i>
+													</a>
+	
+													<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+														data-product_name="{{ $product->product_name }}"
+														data-pro_id="{{ $product->id }}"
+														data-toggle="modal" href="#modaldemo9" title="حذف"><i
+														class="las la-trash"></i>
+													</a>
+												</td>
+											</tr>
+										@endforeach
 									</tbody>
 								</table>
 							</div>
@@ -124,6 +161,74 @@
 				</div>
 			</div>
 			<!-- row closed -->
+
+			<!-- edit -->
+		<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">تعديل المنتج</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+							</button>
+					</div>
+					<form  action="products/update" method="post">
+						@csrf
+						@method('PATCH')
+						<div class="modal-body">
+							<div class="form-group">
+									<input type="hidden" name="pro_id" id="pro_id" value="">
+									<label for="recipient-name" class="col-form-label">اسم المنتج:</label>
+									<input class="form-control" name="product_name" id="product_name" type="text">
+							</div>
+							<div class="form-group">
+								<label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label>
+								<select name="section_name" id="section_name" class="form-control">
+										@foreach ($sections as $section)
+												<option>{{ $section->section_name }}</option>
+										@endforeach
+								</select>
+							</div>
+							<div class="form-group">
+									<label for="message-text" class="col-form-label">ملاحظات:</label>
+									<textarea class="form-control" id="description" name="description"></textarea>
+							</div>
+						</div>
+							<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">تعديل</button>
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+							</div>
+						</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- delete -->
+		<div class="modal" id="modaldemo9">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content modal-content-demo">
+					<div class="modal-header">
+						<h6 class="modal-title">حذف المنتج</h6>
+						<button aria-label="Close" class="close" data-dismiss="modal" type="button">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+						<form action="products/destroy" method="post">
+							@csrf
+							@method('delete')
+							<div class="modal-body">
+									<p>هل انت متاكد من عملية الحذف ؟</p><br>
+									<input type="hidden" name="pro_id" id="pro_id" value="">
+									<input class="form-control" name="product_name" id="product_name" type="text" readonly>
+							</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+									<button type="submit" class="btn btn-danger">حذف</button>
+							</div>
+						</form>
+				</div>
+			</div>
+		</div>
 		</div>
 		<!-- Container closed -->
 	</div>
@@ -149,4 +254,32 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+<script src="{{URL::asset('assets/js/modal.js')}}"></script>
+
+<script>
+	$('#exampleModal2').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget)
+			var product_name = button.data('product_name')
+			var section_name = button.data('section_name')
+			var pro_id = button.data('pro_id')
+			var description = button.data('description')
+			var modal = $(this)
+			modal.find('.modal-body #product_name').val(product_name);
+			modal.find('.modal-body #section_name').val(section_name);
+			modal.find('.modal-body #description').val(description);
+			modal.find('.modal-body #pro_id').val(pro_id);
+	})
+
+
+	$('#modaldemo9').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget)
+			var pro_id = button.data('pro_id')
+			var product_name = button.data('product_name')
+			var modal = $(this)
+
+			modal.find('.modal-body #pro_id').val(pro_id);
+			modal.find('.modal-body #product_name').val(product_name);
+	})
+
+</script>
 @endsection

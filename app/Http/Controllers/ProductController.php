@@ -14,7 +14,8 @@ class ProductController extends Controller
     public function index()
     {
         $sections = Section::all();
-        return view('products.products', compact('sections'));
+        $products = Product::all();
+        return view('products.products', compact('sections', 'products'));
     }
 
     /**
@@ -31,14 +32,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'product_name' => 'required|max:255|unique:products,product_name',
+            'product_name' => 'required|max:255',
             'section_id' => 'required',
-            'description' => 'required',
         ],[
             'product_name.required' => 'يرجى ادخال اسم المنتج',
-            'section_id.required' => 'يرجى تحديد اسم القسم',
-            'product_name.unique' => 'اسم المنتج مسجل مسبقا',
-            'description.required' => 'يرجى ادخال البيانات',
+            'section_id.required' => 'يرجى تحديد اسم المنتج',
         ]);
 
         Product::create([
@@ -70,16 +68,38 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request, [
+            'product_name' => 'required|max:255|unique:products,product_name,'. $request->pro_id,
+        ],[
+            'product_name.required' => 'يرجى ادخال اسم المنتج',
+            'product_name.unique' => 'اسم المنتج مسجل مسبقا',
+        ]);
+
+        $id = Section::where('section_name', $request->section_name)->first()->id;
+
+        $products = Product::findOrFail($request->pro_id);
+
+        $products->update([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+            'section_id' => $id,
+        ]);
+
+        session()->flash('Edit','تم تعديل المنتج بنجاج');
+        return redirect('/products');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->pro_id;
+
+        Product::findOrFail($id)->delete();
+        session()->flash('Delete','تم حذف المنتج بنجاح');
+        return redirect('/products');
     }
 }
