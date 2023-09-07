@@ -68,10 +68,10 @@
 			<!--div-->
 			<div class="col-xl-12">
 				<div class="card mg-b-20">
-					<div class="card-header pb-0 d-flex">
+					<div class="card-header pb-0">
 							<div class="">
-									<a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-scale"
-											data-toggle="modal" href="#modaldemo8">اضافة قسم</a>
+									<a class="modal-effect btn btn-primary-gradient btn-block w-25" data-effect="effect-scale"
+											data-toggle="modal" href="#modaldemo8"><i class="fas fa-plus"></i>&nbsp; اضافة قسم</a>
 							</div>
 					</div>
 					<div class="card-body">
@@ -193,8 +193,8 @@
 						</button>
 					</div>
 						<form action="sections/destroy" method="post">
-							{{method_field('delete')}}
-							{{csrf_field()}}
+							@csrf
+							@method('delete')
 							<div class="modal-body">
 									<p>هل انت متاكد من عملية الحذف ؟</p><br>
 									<input type="hidden" name="id" id="id" value="">
@@ -236,29 +236,25 @@
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
 
-<script>
-    $('#exampleModal2').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var id = button.data('id')
-        var section_name = button.data('section_name')
-        var description = button.data('description')
-        var modal = $(this)
-        modal.find('.modal-body #id').val(id);
-        modal.find('.modal-body #section_name').val(section_name);
-        modal.find('.modal-body #description').val(description);
-    })
+<script> 
+	$('#exampleModal2').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var id = button.data('id')
+		var section_name = button.data('section_name')
+		var description = button.data('description')
+		var modal = $(this)
+		modal.find('.modal-body #id').val(id);
+		modal.find('.modal-body #section_name').val(section_name);
+		modal.find('.modal-body #description').val(description);
+	})
 
-</script>
-
-<script>
-    $('#modaldemo9').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var id = button.data('id')
-        var section_name = button.data('section_name')
-        var modal = $(this)
-        modal.find('.modal-body #id').val(id);
-        modal.find('.modal-body #section_name').val(section_name);
-    })
-
+	$('#modaldemo9').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var id = button.data('id')
+		var section_name = button.data('section_name')
+		var modal = $(this)
+		modal.find('.modal-body #id').val(id);
+		modal.find('.modal-body #section_name').val(section_name);
+	})
 </script>
 @endsection
