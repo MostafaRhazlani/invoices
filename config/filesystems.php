@@ -36,6 +36,12 @@ return [
             'throw' => false,
         ],
 
+        'public_path' => [
+            'driver' => 'local',
+            'root' => public_path('/Attachments'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
