@@ -17,7 +17,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return view('invoices.invoices');
+        // $sections = Section::all(); 
+        $invoices = Invoice::all(); 
+        return view('invoices.invoices', compact('invoices'));
     }
 
     /**
@@ -87,11 +89,7 @@ class InvoiceController extends Controller
         if ($request->hasFile('pic')) {
 
             $this->validate($request, [
-                'pic' => 'required|mimes:pdf,jpeg,png|max:1000',
-                'pic' => 'mimes:pdf',
-                'pic' => 'mimes:jpeg',
-                'pic' => 'mimes:png',
-                'pic' => 'mimes:jpg',
+                'pic' => 'required|mimes:pdf,png,jpg,jpeg|max:1000',
             ],[
                 'pic.mimes' => 'خطأ : صيغة الملف غير مدعومة',
             ]);
@@ -122,9 +120,13 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(invoice $invoice)
+    public function show($id)
     {
-        //
+        $invoices = Invoice::where('id', $id)->first();
+        $details = Invoice_details::where('id_invoice', $id)->get();
+        $invoicesAttachments = Invoice_attachments::where('invoice_id', $id)->get();
+        
+        return view('invoices.invoicesDetails', compact('invoices', 'details', 'invoicesAttachments'));
     }
 
     /**

@@ -56,20 +56,36 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>1</td>
-												<td>200001</td>
-												<td>2023/09/1</td>
-												<td>2023/09/20</td>
-												<td>CC</td>
-												<td>البنك الشعبي</td>
-												<td>1000</td>
-												<td>15%</td>
-												<td>2500</td>
-												<td>2650</td>
-												<td>غير مدفوعة</td>
-												<td>لم يتم السداد</td>
-											</tr>
+												<?php $i = 0; ?>
+											@foreach ($invoices as $invoice)
+												<?php $i++; ?>
+												<tr>
+													<td>{{ $i }}</td>
+													<td>
+														<a href="{{ url('invoicesDetails') }}/{{ $invoice->id  }}">
+															{{ $invoice->invoice_number }}
+														</a>
+													</td>
+													<td>{{ $invoice->invoice_number }}</td>
+													<td>{{ $invoice->invoice_date }}</td>
+													<td>{{ $invoice->due_date }}</td>
+													<td>{{ $invoice->product }}</td>
+													<td>{{ $invoice->section->section_name }}</td>
+													<td>{{ $invoice->discount }}</td>
+													<td>{{ $invoice->rate_vat }}</td>
+													<td>{{ $invoice->value_vat }}</td>
+													<td>{{ $invoice->total }}</td>
+
+													@if ($invoice->value_status == 1)
+														<td class="text-success">{{ $invoice->status }}</td>
+													@elseif ($invoice->value_status == 2)
+														<td class="text-danger">{{ $invoice->status }}</td>
+													@else
+														<td class="text-warning">{{ $invoice->status }}</td>
+													@endif
+													<td>{{ $invoice->note }}</td>
+												</tr>
+											@endforeach
 										</tbody>
 									</table>
 								</div>
