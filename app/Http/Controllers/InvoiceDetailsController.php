@@ -12,7 +12,7 @@ class InvoiceDetailsController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -36,7 +36,7 @@ class InvoiceDetailsController extends Controller
      */
     public function show(Invoice_details $invoice_details)
     {
-        //
+        
     }
 
     /**
@@ -44,7 +44,7 @@ class InvoiceDetailsController extends Controller
      */
     public function edit(Invoice_details $invoice_details)
     {
-        //
+        
     }
 
     /**
