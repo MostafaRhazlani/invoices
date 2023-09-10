@@ -179,10 +179,10 @@ class InvoiceController extends Controller
         $delete_file = Invoice_attachments::where('invoice_id', $id)->first();
 
         if (!empty($delete_file->invoice_number)) {
-            Storage::disk('public_path')->delete($delete_file->invoice_number . '/' . $delete_file->file_name);
+            Storage::disk('public_path')->deleteDirectory($delete_file->invoice_number);
         }
 
-        $invoice->forceDelete();
+        $invoice->Delete();
         session()->flash('Delete');
         return redirect('/invoices');
     }
