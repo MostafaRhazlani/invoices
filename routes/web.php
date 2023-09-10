@@ -37,7 +37,12 @@ Route::resource('products', ProductController::class);
 
 Route::get('/section/{id}', [InvoiceController::class, 'getProducts']);
 
+Route::resource('InvoiceAttachments', InvoiceAttachmentsController::class);
+
+Route::get('/editInvoice/{id}', [InvoiceController::class, 'edit'])->name('editInvoice');
 Route::get('/invoicesDetails/{id}', [InvoiceController::class, 'show']);
+
+
 
 Route::get('/viewFile/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'openFile']);
 Route::get('/download/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'getFile']);
