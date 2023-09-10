@@ -50,6 +50,17 @@
 		</script>
 	@endif
 
+	@if(session()->has('Edit_payment'))
+	<script>
+		window.onload = function() {
+			notif({
+				msg: "تم تغيير حالة الدفع",
+				type: "success"
+			})
+		}
+	</script>
+@endif
+
 	@if(session()->has('Delete'))
 		<script>
 			window.onload = function() {
@@ -122,8 +133,9 @@
 																<button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary-gradient btn-sm"
 																data-toggle="dropdown" type="button">العمليات <i class="fas fa-caret-down ml-1"></i></button>
 																<div  class="dropdown-menu tx-13">
-																	<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}">تعديل الفاتورة</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="">حذف الفاتورة</a>
+																	<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}"><span class="text-success"><i class="typcn typcn-edit"></i></span> تعديل الفاتورة</a>
+																	<a class="dropdown-item" href="{{ route('edit-payment-status', $invoice->id) }}"><span class="text-primary"><i class="fe fe-credit-card"></i></span> تغيير حالة الدفع</a>
+																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href=""><span class="text-danger"><i class="las la-trash"></i></span> حذف الفاتورة</a>
 																</div>
 															</div>																		
 														</td>

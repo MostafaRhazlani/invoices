@@ -40,7 +40,11 @@ Route::get('/section/{id}', [InvoiceController::class, 'getProducts']);
 Route::resource('InvoiceAttachments', InvoiceAttachmentsController::class);
 
 Route::get('/editInvoice/{id}', [InvoiceController::class, 'edit'])->name('editInvoice');
+
 Route::get('/invoicesDetails/{id}', [InvoiceController::class, 'show']);
+
+Route::get('/editPaymentStatus/{id}', [InvoiceDetailsController::class, 'edit'])->name('edit-payment-status');
+Route::get('/updatePaymentStatus/{id}', [InvoiceDetailsController::class, 'update'])->name('update_payment_status');
 
 
 
