@@ -14,6 +14,25 @@
 @endsection
 @section('content')
 
+	@if ($errors->any())
+		<div class="alert alert-danger">
+				<ul>
+						@foreach ($errors->all() as $error)
+						<li>{{ $error }}</li>
+						@endforeach
+				</ul>
+		</div>
+	@endif
+	
+	@if(session()->has('Add'))
+	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		<strong>{{ session()->get('Add') }}</strong>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	@endif
+
 	@if(session()->has('Delete'))
 	<div class="alert alert-danger alert-dismissible fade show" role="alert">
 		<strong>{{ session()->get('Delete') }}</strong>
@@ -40,6 +59,7 @@
 								<div class="panel-body tabs-menu-body main-content-body-right border">
 									<div class="tab-content">
 										<div class="tab-pane active" id="tab4">
+											
 											<table class="table table-striped table-hover">
 												<tbody>
 													<tr>
@@ -102,11 +122,11 @@
 														<th class="border-bottom-0">رقم الفاتورة</th>
 														<th class="border-bottom-0">نوع المنتج</th>
 														<th class="border-bottom-0">القسم</th>
-														<th class="border-bottom-0">حالة الدفع</th>
 														<th class="border-bottom-0">تاريخ الدفع</th>
 														<th class="border-bottom-0">تاريخ الاضافة</th>
-														<th class="border-bottom-0">ملاحضات</th>
 														<th class="border-bottom-0">المستخدم</th>
+														<th class="border-bottom-0">ملاحضات</th>
+														<th class="border-bottom-0">حالة الدفع</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -116,8 +136,12 @@
 														<tr>
 															<td>{{ $i }}</td>
 															<td>{{ $detail->invoice_number }}</td>
-															<td>{{ $detail->product }}</td>
+															<td>{{ $detail->invoice->product }}</td>
 															<td>{{ $invoices->section->section_name }}</td>
+															<td>{{ $detail->payment_date }}</td>
+															<td>{{ $detail->created_at }}</td>
+															<td class="text-success">{{ $detail->user }}</td>
+															<td>{{ $detail->note }}</td>
 															@if ($detail->value_status == 1)
 																<td class="text-success">{{ $detail->status }}</td>
 															@elseif ($detail->value_status == 2)
@@ -125,16 +149,30 @@
 															@else
 																<td class="text-warning">{{ $detail->status }}</td>
 															@endif
-															<td>{{ $detail->payment_date }}</td>
-															<td>{{ $detail->created_at }}</td>
-															<td>{{ $detail->note }}</td>
-															<td>{{ $detail->user }}</td>
 														</tr>
 													@endforeach
 												</tbody>
 											</table>
 										</div>
 										<div class="tab-pane" id="tab6">
+											<div class="card card-statistics">
+												<div class="card-body">
+													<p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
+													<h5 class="card-title">اضافة مرفقات</h5>
+													<form method="post" action="{{ url('/InvoiceAttachments') }}" enctype="multipart/form-data">
+														@csrf
+														<div class="custom-file">
+																<input type="file" class="custom-file-input" id="customFile" name="file_name" required>
+																<input type="hidden" id="customFile" name="invoice_number" value="{{ $invoices->invoice_number }}">
+																<input type="hidden" id="invoice_id" name="invoice_id" value="{{ $invoices->id }}">
+																<label class="custom-file-label" for="customFile">حدد المرفق</label>
+														</div><br><br>
+														<button type="submit" class="btn btn-primary-gradient btn-sm" name="uploadedFile">تاكيد</button>
+													</form>
+												</div>
+											</div>
+											<br>
+
 											<table class="table table-striped table-hover">
 												<thead>
 													<tr>

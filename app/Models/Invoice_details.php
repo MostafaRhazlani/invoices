@@ -12,7 +12,7 @@ class Invoice_details extends Model
     protected $guarded = [];
 
     public function invoice() {
-        return $this->belongsTo(Invoice::class);
+        return $this->belongsTo(Invoice::class, 'id_invoice');
     }
     
     
