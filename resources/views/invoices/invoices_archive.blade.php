@@ -149,7 +149,7 @@
 									<p class="text-center">
 										<h6 style="color:red"> هل انت متاكد من عملية حذف المرفق ؟</h6>
 									</p>
-									<input type="text" name="id_invoice" id="id_invoice" value="">
+									<input type="hidden" name="id_invoice" id="id_invoice" value="">
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -178,7 +178,7 @@
 								<p class="text-center">
 									<h6 style="color:green"> هل انت متاكد من عملية الغاء الارشفة ؟</h6>
 								</p>
-								<input type="text" name="id_invoice" id="id_invoice" value="">
+								<input type="hidden" name="id_invoice" id="id_invoice" value="">
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
