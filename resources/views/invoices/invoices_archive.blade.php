@@ -28,22 +28,22 @@
 @endsection
 @section('content')
 
-	@if(session()->has('Delete'))
+	@if(session()->has('Archive'))
 		<script>
 			window.onload = function() {
 				notif({
-					msg: "تم حذف الفاتورة بنجاح",
+					msg: "تم ارشفة الفاتورة بنجاح",
 					type: "success"
 				})
 			}
 		</script>
 	@endif
 
-	@if(session()->has('Archive'))
+	@if(session()->has('Delete'))
 		<script>
 			window.onload = function() {
 				notif({
-					msg: "تم ارشفة الفاتورة بنجاح",
+					msg: "تم حذف الفاتورة بنجاح",
 					type: "success"
 				})
 			}
@@ -55,8 +55,6 @@
 					<div class="col-xl-12">
             <div class="card mg-b-20">
 							<div class="card-header pb-0">
-								<a class="btn btn-primary-gradient btn-block w-25" 
-								href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
 							</div>
                 <div class="card-body">
 									<div class="table-responsive">
@@ -111,11 +109,11 @@
 																<button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary-gradient btn-sm"
 																data-toggle="dropdown" type="button">العمليات <i class="fas fa-caret-down ml-1"></i></button>
 																<div  class="dropdown-menu tx-13">
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="">
+																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#cancel_archive" href="#">
 																		<span class="text-warning"><i class="icon ion-ios-share-alt"></i></span> 
-																		ارجاع الى الفواتير
+																		استعادة الفاتوة
 																	</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="">
+																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="#">
 																		<span class="text-danger"><i class="las la-trash"></i></span> 
 																		حذف الفاتورة
 																	</a>
@@ -144,14 +142,14 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<form action="{{ route('invoices.destroy', 'test') }}" method="post">
+							<form action="{{ route('invoices_archive.destroy', 'test') }}" method="post">
 								@method('delete')
 								@csrf
 								<div class="modal-body">
 									<p class="text-center">
 										<h6 style="color:red"> هل انت متاكد من عملية حذف المرفق ؟</h6>
 									</p>
-									<input type="hidden" name="id_invoice" id="id_invoice" value="">
+									<input type="text" name="id_invoice" id="id_invoice" value="">
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
@@ -162,6 +160,35 @@
 					</div>
 				</div>
 			</div>
+
+			<!-- cancel archive -->
+			<div class="modal fade" id="cancel_archive" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">الغاء الارشفة</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form action="{{ route('invoices_archive.update', 'test') }}" method="post">
+							@method('PATCH')
+							@csrf
+							<div class="modal-body">
+								<p class="text-center">
+									<h6 style="color:green"> هل انت متاكد من عملية الغاء الارشفة ؟</h6>
+								</p>
+								<input type="text" name="id_invoice" id="id_invoice" value="">
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
+								<button type="submit" class="btn btn-success">تاكيد</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 			<!-- Container closed -->
 		</div>
 		<!-- main-content closed -->
@@ -191,6 +218,16 @@
 <!--Internal  Notify js -->
 <script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/notify/js/notifit-custom.js')}}"></script>
+
+<script>
+	$('#cancel_archive').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget)
+			var id_invoice = button.data('id_invoice')
+			var modal = $(this)
+
+			modal.find('.modal-body #id_invoice').val(id_invoice);
+	})
+</script>
 
 <script>
 	$('#delete_invoice').on('show.bs.modal', function(event) {

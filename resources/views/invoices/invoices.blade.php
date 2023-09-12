@@ -71,6 +71,17 @@
 			}
 		</script>
 	@endif
+
+	@if(session()->has('Restore'))
+		<script>
+			window.onload = function() {
+				notif({
+					msg: "تم الغاء الارشفة بنجاح",
+					type: "success"
+				})
+			}
+		</script>
+	@endif
 				<!-- row -->
 				<div class="row">
 					<!--div-->

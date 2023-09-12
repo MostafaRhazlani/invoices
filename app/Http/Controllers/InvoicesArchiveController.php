@@ -53,7 +53,11 @@ class InvoicesArchiveController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        $id = $request->id_invoice;
+        $invoice = Invoice::withTrashed()->where('id', $id)->restore();
+
+        session()->flash('Restore');
+        return redirect('/invoices');
     }
 
     /**
@@ -61,6 +65,12 @@ class InvoicesArchiveController extends Controller
      */
     public function destroy(Request $request)
     {
-        
+        $id = $request->id_invoice;
+
+        $destroy_archives = Invoice::withTrashed()->where('id', $id);
+        $destroy_archives->forceDelete();
+
+        session()->flash('Delete');
+        return redirect('/invoices_archive');
     }
 }
