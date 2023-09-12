@@ -192,4 +192,25 @@ class InvoiceController extends Controller
         $products = DB::table('products')->where('section_id', $id)->pluck('product_name', 'id');
         return json_encode($products);
     }
+
+    public function invoices_paid()
+    {
+        $invoices_paid = Invoice::where('value_status', 1)->get();
+        // return $invoices_paid;
+        return view('invoices.invoices_paid', compact('invoices_paid'));
+    }
+
+    public function invoices_unpaid()
+    {
+        echo "unpaid";
+        $invoices_unpaid = Invoice::where('value_status', 2)->get();
+        // // return $invoices_unpaid;
+        return view('invoices.invoices_unpaid', compact('invoices_unpaid'));
+    }
+
+    public function invoices_partiall()
+    {
+        $invoices_partiall = Invoice::where('value_status', 3)->get();
+        return view('invoices.invoices_partiall', compact('invoices_partiall'));
+    }
 }

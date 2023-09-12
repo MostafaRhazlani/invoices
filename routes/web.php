@@ -46,10 +46,12 @@ Route::get('/invoicesDetails/{id}', [InvoiceController::class, 'show']);
 Route::get('/editPaymentStatus/{id}', [InvoiceDetailsController::class, 'edit'])->name('edit-payment-status');
 Route::get('/updatePaymentStatus/{id}', [InvoiceDetailsController::class, 'update'])->name('update_payment_status');
 
-
-
 Route::get('/viewFile/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'openFile']);
 Route::get('/download/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'getFile']);
 Route::post('/delete_file', [InvoiceAttachmentsController::class, 'destroy'])->name('delete_file');
+
+Route::get('/invoices_paid', [InvoiceController::class, 'invoices_paid']);
+Route::get('/invoices_unpaid', [InvoiceController::class, 'invoices_unpaid']);
+Route::get('/invoices_partiall', [InvoiceController::class, 'invoices_partiall']);
 
 Route::get('/{page}', [AdminController::class, 'index']);
