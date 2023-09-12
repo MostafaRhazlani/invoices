@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-قائمة الفواتير
+ارشيف الفواتير 
 @endsection
 
 @section('css')
@@ -20,7 +20,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قائمة الفواتير</span>
+							<h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ ارشيف الفواتير </span>
 						</div>
 					</div>
 				</div>
@@ -28,44 +28,22 @@
 @endsection
 @section('content')
 
-	@if(session()->has('Add'))
-		<script>
-			window.onload = function() {
-				notif({
-					msg: "تم اضافة الفاتورة بنجاح",
-					type: "success"
-				})
-			}
-		</script>
-	@endif
-
-	@if(session()->has('Edit'))
-		<script>
-			window.onload = function() {
-				notif({
-					msg: "تم تعديل الفاتورة بنجاح",
-					type: "success"
-				})
-			}
-		</script>
-	@endif
-
-	@if(session()->has('Edit_payment'))
-	<script>
-		window.onload = function() {
-			notif({
-				msg: "تم تغيير حالة الدفع",
-				type: "success"
-			})
-		}
-	</script>
-@endif
-
 	@if(session()->has('Delete'))
 		<script>
 			window.onload = function() {
 				notif({
 					msg: "تم حذف الفاتورة بنجاح",
+					type: "success"
+				})
+			}
+		</script>
+	@endif
+
+	@if(session()->has('Archive'))
+		<script>
+			window.onload = function() {
+				notif({
+					msg: "تم ارشفة الفاتورة بنجاح",
 					type: "success"
 				})
 			}
@@ -102,7 +80,7 @@
 											</thead>
 											<tbody>
 												<?php $i = 0; ?>
-												@foreach ($invoices as $invoice)
+												@foreach ($invoicesArchive as $invoice)
 													<?php $i++; ?>
 													<tr>
 														<td>{{ $i }}</td>
@@ -133,10 +111,14 @@
 																<button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary-gradient btn-sm"
 																data-toggle="dropdown" type="button">العمليات <i class="fas fa-caret-down ml-1"></i></button>
 																<div  class="dropdown-menu tx-13">
-																	<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}"><span class="text-primary"><i class="typcn typcn-edit"></i></span> تعديل الفاتورة</a>
-																	<a class="dropdown-item" href="{{ route('edit-payment-status', $invoice->id) }}"><span class="text-success"><i class="fe fe-credit-card"></i></span> تغيير حالة الدفع</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#invoices_archive" href=""><span class="text-warning"><i class="typcn typcn-arrow-back-outline"></i></span> نقل الى الارشيف</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href=""><span class="text-danger"><i class="las la-trash"></i></span> حذف الفاتورة</a>
+																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="">
+																		<span class="text-warning"><i class="icon ion-ios-share-alt"></i></span> 
+																		ارجاع الى الفواتير
+																	</a>
+																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href="">
+																		<span class="text-danger"><i class="las la-trash"></i></span> 
+																		حذف الفاتورة
+																	</a>
 																</div>
 															</div>																		
 														</td>
@@ -179,34 +161,6 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="modal fade" id="invoices_archive" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">ارشفة الفواتير</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<form action="{{ route('invoices.destroy', 'test') }}" method="post">
-								@method('delete')
-								@csrf
-								<div class="modal-body">
-									<p class="text-center">
-										<h6 style="color:green"> هل انت متاكد من عملية الارشفة ؟</h6>
-									</p>
-									<input type="hidden" name="id_invoice" id="id_invoice" value="">
-									<input type="hidden" name="id_page" id="id_page" value="2">
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-									<button type="submit" class="btn btn-success">تاكيد</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
 			</div>
 			<!-- Container closed -->
 		</div>
@@ -240,16 +194,6 @@
 
 <script>
 	$('#delete_invoice').on('show.bs.modal', function(event) {
-			var button = $(event.relatedTarget)
-			var id_invoice = button.data('id_invoice')
-			var modal = $(this)
-
-			modal.find('.modal-body #id_invoice').val(id_invoice);
-	})
-</script>
-
-<script>
-	$('#invoices_archive').on('show.bs.modal', function(event) {
 			var button = $(event.relatedTarget)
 			var id_invoice = button.data('id_invoice')
 			var modal = $(this)

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceAttachmentsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailsController;
+use App\Http\Controllers\InvoicesArchiveController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Auth;
@@ -53,5 +54,7 @@ Route::post('/delete_file', [InvoiceAttachmentsController::class, 'destroy'])->n
 Route::get('/invoices_paid', [InvoiceController::class, 'invoices_paid']);
 Route::get('/invoices_unpaid', [InvoiceController::class, 'invoices_unpaid']);
 Route::get('/invoices_partiall', [InvoiceController::class, 'invoices_partiall']);
+
+Route::resource('invoices_archive', InvoicesArchiveController::class);
 
 Route::get('/{page}', [AdminController::class, 'index']);

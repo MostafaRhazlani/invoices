@@ -173,18 +173,27 @@ class InvoiceController extends Controller
      */
     public function destroy(Request $request)
     {
-        
+        $id_page = $request->id_page;
+        // return $id_page;
         $id = $request->id_invoice;
         $invoice = Invoice::where('id', $id)->first();
         $delete_file = Invoice_attachments::where('invoice_id', $id)->first();
 
-        if (!empty($delete_file->invoice_number)) {
-            Storage::disk('public_path')->deleteDirectory($delete_file->invoice_number);
+        if(!$id_page == 2) {
+            if (!empty($delete_file->invoice_number)) {
+                Storage::disk('public_path')->deleteDirectory($delete_file->invoice_number);
+            }
+
+            $invoice->forceDelete();
+            session()->flash('Delete');
+            return redirect('/invoices');
+        } else {
+
+            $invoice->Delete();
+            session()->flash('Archive');
+            return redirect('/invoices_archive');
         }
 
-        $invoice->Delete();
-        session()->flash('Delete');
-        return redirect('/invoices');
     }
 
     public function getProducts($id)
