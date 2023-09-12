@@ -27,58 +27,12 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
-
-	@if(session()->has('Add'))
-		<script>
-			window.onload = function() {
-				notif({
-					msg: "تم اضافة الفاتورة بنجاح",
-					type: "success"
-				})
-			}
-		</script>
-	@endif
-
-	@if(session()->has('Edit'))
-		<script>
-			window.onload = function() {
-				notif({
-					msg: "تم تعديل الفاتورة بنجاح",
-					type: "success"
-				})
-			}
-		</script>
-	@endif
-
-	@if(session()->has('Edit_payment'))
-	<script>
-		window.onload = function() {
-			notif({
-				msg: "تم تغيير حالة الدفع",
-				type: "success"
-			})
-		}
-	</script>
-@endif
-
-	@if(session()->has('Delete'))
-		<script>
-			window.onload = function() {
-				notif({
-					msg: "تم حذف الفاتورة بنجاح",
-					type: "success"
-				})
-			}
-		</script>
-	@endif
 				<!-- row -->
 				<div class="row">
 					<!--div-->
 					<div class="col-xl-12">
             <div class="card mg-b-20">
 							<div class="card-header pb-0">
-								<a class="btn btn-primary-gradient btn-block w-25" 
-								href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
 							</div>
                 <div class="card-body">
 									<div class="table-responsive">
