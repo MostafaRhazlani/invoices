@@ -146,6 +146,7 @@
 																<div  class="dropdown-menu tx-13">
 																	<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}"><span class="text-primary"><i class="typcn typcn-edit"></i></span> تعديل الفاتورة</a>
 																	<a class="dropdown-item" href="{{ route('edit-payment-status', $invoice->id) }}"><span class="text-success"><i class="fe fe-credit-card"></i></span> تغيير حالة الدفع</a>
+																	<a class="dropdown-item" href="{{ route('print_invoice', $invoice->id) }}"><span class="text-primary"><i class="icon ion-ios-print"></i></span> طباعة الفاتورة</a>
 																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#invoices_archive" href=""><span class="text-warning"><i class="typcn typcn-arrow-back-outline"></i></span> نقل الى الارشيف</a>
 																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href=""><span class="text-danger"><i class="las la-trash"></i></span> حذف الفاتورة</a>
 																</div>

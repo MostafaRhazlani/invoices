@@ -205,15 +205,12 @@ class InvoiceController extends Controller
     public function invoices_paid()
     {
         $invoices_paid = Invoice::where('value_status', 1)->get();
-        // return $invoices_paid;
         return view('invoices.invoices_paid', compact('invoices_paid'));
     }
 
     public function invoices_unpaid()
     {
-        echo "unpaid";
         $invoices_unpaid = Invoice::where('value_status', 2)->get();
-        // // return $invoices_unpaid;
         return view('invoices.invoices_unpaid', compact('invoices_unpaid'));
     }
 
@@ -221,5 +218,13 @@ class InvoiceController extends Controller
     {
         $invoices_partiall = Invoice::where('value_status', 3)->get();
         return view('invoices.invoices_partiall', compact('invoices_partiall'));
+    }
+
+    public function print_invoice(Request $request)
+    {
+        $id = $request->id;
+        $print_invoice = Invoice::where('id', $id)->first();
+        // return $print_invoice;
+        return view('invoices.print_invoices', compact('print_invoice'));
     }
 }
