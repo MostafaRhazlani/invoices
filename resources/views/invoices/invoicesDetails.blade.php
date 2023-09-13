@@ -1,4 +1,9 @@
 @extends('layouts.master')
+
+@section('title')
+تفاصيل الفاتورة
+@endsection
+
 @section('css')
 @endsection
 @section('page-header')
