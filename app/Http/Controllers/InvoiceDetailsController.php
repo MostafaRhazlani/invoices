@@ -96,9 +96,9 @@ class InvoiceDetailsController extends Controller
                 'user' => Auth::user()->name,
             ]);
 
+        }
             session()->flash('Edit_payment');
             return redirect('/invoices');
-        }
     }
 
     /**
