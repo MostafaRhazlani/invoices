@@ -58,5 +58,6 @@ Route::get('/invoices_partiall', [InvoiceController::class, 'invoices_partiall']
 
 Route::resource('invoices_archive', InvoicesArchiveController::class);
 
+Route::get('export_invoices', [InvoiceController::class, 'export']);
 
 Route::get('/{page}', [AdminController::class, 'index']);

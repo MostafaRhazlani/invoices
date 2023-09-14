@@ -88,8 +88,10 @@
 					<div class="col-xl-12">
             <div class="card mg-b-20">
 							<div class="card-header pb-0">
-								<a class="btn btn-primary-gradient btn-block w-25" 
-								href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+								<div class="col col-6">
+									<a class="btn btn-primary-gradient w-25" href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
+									<a class="btn btn-success-gradient w-25 modal-effect" href="{{ url('export_invoices') }}"><i class="fas fa-file-download"></i>&nbsp; تصدير اكسيل</a>
+								</div>
 							</div>
                 <div class="card-body">
 									<div class="table-responsive">
