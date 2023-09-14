@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-تعديل فاتورة
+تعديل حالة الدفع
 @stop
 @section('css')
 <!--- Internal Select2 css-->

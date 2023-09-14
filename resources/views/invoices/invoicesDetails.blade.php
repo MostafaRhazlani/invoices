@@ -1,4 +1,9 @@
 @extends('layouts.master')
+
+@section('title')
+تفاصيل الفاتورة
+@endsection
+
 @section('css')
 @endsection
 @section('page-header')
@@ -63,10 +68,10 @@
 											<table class="table table-striped table-hover">
 												<tbody>
 													<tr>
-														<td>رقم الفاتورة</td>
-														<td>تاريخ الفاتورة</td>
-														<td>تاريخ الاستحقاق</td>
-														<td>القسم</td>
+														<th>رقم الفاتورة</th>
+														<th>تاريخ الفاتورة</th>
+														<th>تاريخ الاستحقاق</th>
+														<th>القسم</th>
 													</tr>
 													<tr>
 														<td>{{ $invoices->invoice_number }}</td>
@@ -76,10 +81,10 @@
 													</tr>
 													<tr>
 														
-														<td>المنتج</td>
-														<td>مبلغ التحصيل</td>
-														<td>مبلغ العمولة</td>
-														<td>الخصم</td>
+														<th>المنتج</th>
+														<th>مبلغ التحصيل</th>
+														<th>مبلغ العمولة</th>
+														<th>الخصم</th>
 													</tr>
 													<tr>
 														<td>{{ $invoices->product }}</td>
@@ -88,10 +93,10 @@
 														<td>{{ $invoices->discount }}</td>
 													</tr>
 													<tr>
-														<td>نسبة الضريبة</td>
-														<td>قيمة الضريبة</td>
-														<td>الاجمالي مع الضريبة</td>
-														<td>الحالة</td>
+														<th>نسبة الضريبة</th>
+														<th>قيمة الضريبة</th>
+														<th>الاجمالي مع الضريبة</th>
+														<th>الحالة</th>
 													</tr>
 													<tr>
 														<td>{{ $invoices->rate_vat }}</td>
@@ -106,7 +111,7 @@
 														@endif
 													</tr>
 													<tr>
-														<td class="text-center" colspan="4">ملاحضات</td>
+														<th class="text-center" colspan="4">ملاحضات</td>
 													</tr>
 													<tr>
 														<td colspan="4">{{ $invoices->note }}</td>
@@ -117,7 +122,7 @@
 										<div class="tab-pane" id="tab5">
 											<table class="table table-striped table-hover">
 												<thead>
-													<tr>
+													<tr class="text-center">
 														<th>#</th>
 														<th class="border-bottom-0">رقم الفاتورة</th>
 														<th class="border-bottom-0">نوع المنتج</th>
@@ -133,7 +138,7 @@
 													<?php $i = 0; ?>
 													@foreach ($details as $detail)
 														<?php $i++; ?>
-														<tr>
+														<tr class="text-center">
 															<td>{{ $i }}</td>
 															<td>{{ $detail->invoice_number }}</td>
 															<td>{{ $detail->invoice->product }}</td>
@@ -143,11 +148,17 @@
 															<td class="text-success">{{ $detail->user }}</td>
 															<td>{{ $detail->note }}</td>
 															@if ($detail->value_status == 1)
-																<td class="text-success">{{ $detail->status }}</td>
+																<td>
+																	<span class="badge badge-pill badge-success">{{ $detail->status }}</span>
+																</td>
 															@elseif ($detail->value_status == 2)
-																<td class="text-danger">{{ $detail->status }}</td>
+																<td>
+																	<span class="badge badge-pill badge-danger">{{ $detail->status }}</span>
+																</td>
 															@else
-																<td class="text-warning">{{ $detail->status }}</td>
+																<td>
+																	<span class="badge badge-pill badge-warning">{{ $detail->status }}</span>
+																</td>
 															@endif
 														</tr>
 													@endforeach
@@ -175,7 +186,7 @@
 
 											<table class="table table-striped table-hover">
 												<thead>
-													<tr>
+													<tr class="text-center">
 														<th class="border-bottom-0">#</th>
 														<th class="border-bottom-0">اسم الملف</th>
 														<th class="border-bottom-0">تاريخ الاضافة</th>
@@ -187,7 +198,7 @@
 													<?php $i = 0; ?>
 													@foreach ($invoicesAttachments as $attachment)
 														<?php $i++; ?>
-														<tr>
+														<tr class="text-center">
 															<td>{{ $i }}</td>
 															<td>{{ $attachment->file_name }}</td>
 															<td>{{ $attachment->created_at }}</td>

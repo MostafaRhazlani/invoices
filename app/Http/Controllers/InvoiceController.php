@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\InvoiceExport;
 use App\Models\Invoice;
 use App\Models\Invoice_attachments;
 use App\Models\Invoice_details;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\EmailInvoices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InvoiceController extends Controller
 {
@@ -112,10 +116,11 @@ class InvoiceController extends Controller
             $imageName = $request->pic->getClientOriginalName();
             $request->pic->move(public_path('Attachments/'. $invoice_number), $imageName);
 
+        }
+            $user = User::first();
+            $user->notify(new EmailInvoices($invoice_id));
             session()->flash('Add');
             return redirect('/invoices');
-        }
-
     }
 
     /**
@@ -136,7 +141,6 @@ class InvoiceController extends Controller
     public function edit($id)
     {
         $invoices = Invoice::where('id', $id)->first();
-        // return $invoices;
         $sections = Section::all();
 
         return view('invoices.edit_invoice', compact('invoices', 'sections'));
@@ -148,7 +152,6 @@ class InvoiceController extends Controller
     public function update(Request $request)
     {
         $invoice = Invoice::findOrFail($request->invoice_id);
-        // return $invoice;
         $invoice->update([
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
@@ -173,23 +176,62 @@ class InvoiceController extends Controller
      */
     public function destroy(Request $request)
     {
-        
+        $id_page = $request->id_page;
         $id = $request->id_invoice;
         $invoice = Invoice::where('id', $id)->first();
         $delete_file = Invoice_attachments::where('invoice_id', $id)->first();
 
-        if (!empty($delete_file->invoice_number)) {
-            Storage::disk('public_path')->deleteDirectory($delete_file->invoice_number);
+        if(!$id_page == 2) {
+            if (!empty($delete_file->invoice_number)) {
+                Storage::disk('public_path')->deleteDirectory($delete_file->invoice_number);
+            }
+
+            $invoice->forceDelete();
+            session()->flash('Delete');
+            return redirect('/invoices');
+        } else {
+
+            $invoice->Delete();
+            session()->flash('Archive');
+            return redirect('/invoices_archive');
         }
 
-        $invoice->Delete();
-        session()->flash('Delete');
-        return redirect('/invoices');
     }
 
     public function getProducts($id)
     {
         $products = DB::table('products')->where('section_id', $id)->pluck('product_name', 'id');
         return json_encode($products);
+    }
+
+    public function invoices_paid()
+    {
+        $invoices_paid = Invoice::where('value_status', 1)->get();
+        return view('invoices.invoices_paid', compact('invoices_paid'));
+    }
+
+    public function invoices_unpaid()
+    {
+        $invoices_unpaid = Invoice::where('value_status', 2)->get();
+        return view('invoices.invoices_unpaid', compact('invoices_unpaid'));
+    }
+
+    public function invoices_partiall()
+    {
+        $invoices_partiall = Invoice::where('value_status', 3)->get();
+        return view('invoices.invoices_partiall', compact('invoices_partiall'));
+    }
+
+    public function print_invoice(Request $request)
+    {
+        $id = $request->id;
+        $print_invoice = Invoice::where('id', $id)->first();
+        return view('invoices.print_invoices', compact('print_invoice'));
+    }
+
+    // Export invoices
+    public function export() 
+    {
+        return Excel::download(new InvoiceExport, 'Invoices.xlsx');
     }
 }
