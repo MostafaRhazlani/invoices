@@ -6,6 +6,8 @@ use App\Models\Invoice;
 use App\Models\Invoice_attachments;
 use App\Models\Invoice_details;
 use App\Models\Section;
+use App\Models\User;
+use App\Notifications\EmailInvoices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -112,10 +114,11 @@ class InvoiceController extends Controller
             $imageName = $request->pic->getClientOriginalName();
             $request->pic->move(public_path('Attachments/'. $invoice_number), $imageName);
 
+        }
+            $user = User::first();
+            $user->notify(new EmailInvoices($invoice_id));
             session()->flash('Add');
             return redirect('/invoices');
-        }
-
     }
 
     /**
@@ -136,7 +139,6 @@ class InvoiceController extends Controller
     public function edit($id)
     {
         $invoices = Invoice::where('id', $id)->first();
-        // return $invoices;
         $sections = Section::all();
 
         return view('invoices.edit_invoice', compact('invoices', 'sections'));
@@ -148,7 +150,6 @@ class InvoiceController extends Controller
     public function update(Request $request)
     {
         $invoice = Invoice::findOrFail($request->invoice_id);
-        // return $invoice;
         $invoice->update([
             'invoice_number' => $request->invoice_number,
             'invoice_date' => $request->invoice_date,
@@ -174,7 +175,6 @@ class InvoiceController extends Controller
     public function destroy(Request $request)
     {
         $id_page = $request->id_page;
-        // return $id_page;
         $id = $request->id_invoice;
         $invoice = Invoice::where('id', $id)->first();
         $delete_file = Invoice_attachments::where('invoice_id', $id)->first();
@@ -224,7 +224,6 @@ class InvoiceController extends Controller
     {
         $id = $request->id;
         $print_invoice = Invoice::where('id', $id)->first();
-        // return $print_invoice;
         return view('invoices.print_invoices', compact('print_invoice'));
     }
 }
