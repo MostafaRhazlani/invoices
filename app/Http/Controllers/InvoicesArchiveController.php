@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class InvoicesArchiveController extends Controller
 {
+    function __construct()
+    {
+      $this->middleware('permission:ارشيف الفواتير', ['only' => ['index']]);
+    //   $this->middleware('permission:اضافة فاتورة', ['only' => ['create','store']]);
+    //   $this->middleware('permission:تعديل الفاتورة', ['only' => ['edit','update']]);
+    //   $this->middleware('permission:حذف الفاتورة', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
