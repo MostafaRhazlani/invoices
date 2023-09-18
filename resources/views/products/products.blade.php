@@ -70,7 +70,9 @@
 					<div class="card mg-b-20">
 						<div class="card-header pb-0">
 							<div class="d-flex justify-content-between">
-								<button class="btn btn-primary-gradient btn-block w-25" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i>&nbsp; اضافة منتج</button>
+								@can('اضافة منتج')
+									<button class="btn btn-primary-gradient btn-block w-25" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i>&nbsp; اضافة منتج</button>
+								@endcan
 							</div>
 						</div>
 						<div class="card-body">
@@ -95,20 +97,24 @@
 												<td>{{ $product->section->section_name }}</td>
 												<td>{{ $product->description }}</td>
 												<td>
-													<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
-														data-product_name="{{ $product->product_name }}" 
-														data-pro_id="{{ $product->id }}" 
-														data-section_name="{{ $product->section->section_name }}"
-														data-description="{{ $product->description }}" data-toggle="modal"
-														href="#exampleModal2" title="تعديل"><i class="las la-pen"></i>
-													</a>
+													@can('تعديل منتج')
+														<a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
+															data-product_name="{{ $product->product_name }}" 
+															data-pro_id="{{ $product->id }}" 
+															data-section_name="{{ $product->section->section_name }}"
+															data-description="{{ $product->description }}" data-toggle="modal"
+															href="#exampleModal2" title="تعديل"><i class="las la-pen"></i>
+														</a>
+													@endcan
 	
-													<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
-														data-product_name="{{ $product->product_name }}"
-														data-pro_id="{{ $product->id }}"
-														data-toggle="modal" href="#modaldemo9" title="حذف"><i
-														class="las la-trash"></i>
-													</a>
+													@can('حذف منتج')
+														<a class="modal-effect btn btn-sm btn-danger" data-effect="effect-scale"
+															data-product_name="{{ $product->product_name }}"
+															data-pro_id="{{ $product->id }}"
+															data-toggle="modal" href="#modaldemo9" title="حذف"><i
+															class="las la-trash"></i>
+														</a>
+													@endcan
 												</td>
 											</tr>
 										@endforeach

@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
+    function __construct()
+  {
+    $this->middleware('permission:الاقسام', ['only' => ['index']]);
+    // $this->middleware('permission:اضافة صلاحية', ['only' => ['create','store']]);
+    // $this->middleware('permission:تعديل صلاحية', ['only' => ['edit','update']]);
+    // $this->middleware('permission:حذف صلاحية', ['only' => ['destroy']]);
+  }
     /**
      * Display a listing of the resource.
      */

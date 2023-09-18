@@ -89,8 +89,12 @@
             <div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="col col-6">
+								@can('اضافة فاتورة')
 									<a class="btn btn-primary-gradient w-25" href="invoices/create"><i class="fas fa-plus"></i>&nbsp; اضافة فاتورة</a>
-									<a class="btn btn-success-gradient w-25 modal-effect" href="{{ url('export_invoices') }}"><i class="fas fa-file-download"></i>&nbsp; تصدير اكسيل</a>
+								@endcan
+								@can('تصدير EXCEL')
+										<a class="btn btn-success-gradient w-25 modal-effect" href="{{ url('export_invoices') }}"><i class="fas fa-file-download"></i>&nbsp; تصدير اكسيل</a>
+								@endcan
 								</div>
 							</div>
                 <div class="card-body">
@@ -146,11 +150,21 @@
 																<button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary-gradient btn-sm"
 																data-toggle="dropdown" type="button">العمليات <i class="fas fa-caret-down ml-1"></i></button>
 																<div  class="dropdown-menu tx-13">
-																	<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}"><span class="text-primary"><i class="typcn typcn-edit"></i></span> تعديل الفاتورة</a>
-																	<a class="dropdown-item" href="{{ route('edit-payment-status', $invoice->id) }}"><span class="text-success"><i class="fe fe-credit-card"></i></span> تغيير حالة الدفع</a>
-																	<a class="dropdown-item" href="{{ route('print_invoice', $invoice->id) }}"><span class="text-primary"><i class="icon ion-ios-print"></i></span> طباعة الفاتورة</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#invoices_archive" href=""><span class="text-warning"><i class="typcn typcn-arrow-back-outline"></i></span> نقل الى الارشيف</a>
-																	<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href=""><span class="text-danger"><i class="las la-trash"></i></span> حذف الفاتورة</a>
+																	@can('تعديل الفاتورة')
+																		<a class="dropdown-item" href="{{ route('editInvoice', $invoice->id) }}"><span class="text-primary"><i class="typcn typcn-edit"></i></span> تعديل الفاتورة</a>
+																	@endcan
+																	@can('تغير حالة الدفع')
+																		<a class="dropdown-item" href="{{ route('edit-payment-status', $invoice->id) }}"><span class="text-success"><i class="fe fe-credit-card"></i></span> تغيير حالة الدفع</a>
+																	@endcan
+																	@can('طباعةالفاتورة')
+																		<a class="dropdown-item" href="{{ route('print_invoice', $invoice->id) }}"><span class="text-primary"><i class="icon ion-ios-print"></i></span> طباعة الفاتورة</a>
+																	@endcan
+																	@can('ارشفة الفاتورة')
+																		<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#invoices_archive" href=""><span class="text-warning"><i class="typcn typcn-arrow-back-outline"></i></span> نقل الى الارشيف</a>
+																	@endcan
+																	@can('حذف الفاتورة')
+																		<a class="dropdown-item" data-id_invoice="{{ $invoice->id }}" data-toggle="modal" data-target="#delete_invoice" href=""><span class="text-danger"><i class="las la-trash"></i></span> حذف الفاتورة</a>
+																	@endcan
 																</div>
 															</div>																		
 														</td>
