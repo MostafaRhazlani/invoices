@@ -23,7 +23,7 @@ class InvoiceController extends Controller
       $this->middleware('permission:الفواتير المدفوعة', ['only' => ['invoices_paid']]);
       $this->middleware('permission:الفواتير الغير مدفوعة', ['only' => ['invoices_unpaid']]);
       $this->middleware('permission:الفواتير المدفوعة جزئيا', ['only' => ['invoices_partiall']]);
-      $this->middleware('permission:طباعة الفاتورة', ['only' => ['print_invoice']]);
+      $this->middleware('permission:طباعةالفاتورة', ['only' => ['print_invoice']]);
       $this->middleware('permission:تصدير EXCEL', ['only' => ['export']]);
       $this->middleware('permission:اضافة فاتورة', ['only' => ['create','store']]);
       $this->middleware('permission:تعديل الفاتورة', ['only' => ['edit','update']]);
