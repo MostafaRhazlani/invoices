@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CustomersReportsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceAttachmentsController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\InvoicesArchiveController;
+use App\Http\Controllers\InvoicesReportsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
@@ -42,25 +44,31 @@ Route::get('/section/{id}', [InvoiceController::class, 'getProducts']);
 
 Route::resource('InvoiceAttachments', InvoiceAttachmentsController::class);
 
-Route::get('/editInvoice/{id}', [InvoiceController::class, 'edit'])->name('editInvoice');
-Route::get('/print_invoice/{id}', [InvoiceController::class, 'print_invoice'])->name('print_invoice');
+Route::get('editInvoice/{id}', [InvoiceController::class, 'edit'])->name('editInvoice');
+Route::get('print_invoice/{id}', [InvoiceController::class, 'print_invoice'])->name('print_invoice');
 
-Route::get('/invoicesDetails/{id}', [InvoiceController::class, 'show']);
+Route::get('invoicesDetails/{id}', [InvoiceController::class, 'show']);
 
-Route::get('/editPaymentStatus/{id}', [InvoiceDetailsController::class, 'edit'])->name('edit-payment-status');
-Route::get('/updatePaymentStatus/{id}', [InvoiceDetailsController::class, 'update'])->name('update_payment_status');
+Route::get('editPaymentStatus/{id}', [InvoiceDetailsController::class, 'edit'])->name('edit-payment-status');
+Route::get('updatePaymentStatus/{id}', [InvoiceDetailsController::class, 'update'])->name('update_payment_status');
 
-Route::get('/viewFile/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'openFile']);
-Route::get('/download/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'getFile']);
-Route::post('/delete_file', [InvoiceAttachmentsController::class, 'destroy'])->name('delete_file');
+Route::get('viewFile/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'openFile']);
+Route::get('download/{invoice_number}/{file_name}', [InvoiceAttachmentsController::class, 'getFile']);
+Route::post('delete_file', [InvoiceAttachmentsController::class, 'destroy'])->name('delete_file');
 
-Route::get('/invoices_paid', [InvoiceController::class, 'invoices_paid']);
-Route::get('/invoices_unpaid', [InvoiceController::class, 'invoices_unpaid']);
-Route::get('/invoices_partiall', [InvoiceController::class, 'invoices_partiall']);
+Route::get('invoices_paid', [InvoiceController::class, 'invoices_paid']);
+Route::get('invoices_unpaid', [InvoiceController::class, 'invoices_unpaid']);
+Route::get('invoices_partiall', [InvoiceController::class, 'invoices_partiall']);
 
 Route::resource('invoices_archive', InvoicesArchiveController::class);
 
 Route::get('export_invoices', [InvoiceController::class, 'export']);
+
+Route::get('invoices_reports', [InvoicesReportsController::class, 'index']);
+Route::post('search_invoices', [InvoicesReportsController::class, 'search_invoices'])->name('search_invoices');
+
+Route::get('customers_reports', [CustomersReportsController::class, 'index']);
+Route::post('search_customers', [CustomersReportsController::class, 'search_customers'])->name('search_customers');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
