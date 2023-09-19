@@ -54,7 +54,7 @@ public function store(Request $request)
   $this->validate($request, [
     'name' => 'required',
     'email' => 'required|email|unique:users,email',
-    'password' => 'required|confirmed',
+    'password' => 'required|min:6|confirmed',
     'roles_name' => 'required'
   ]);
 
@@ -103,20 +103,26 @@ return view('users.edit',compact('user','roles','userRole'));
 */
 public function update(Request $request, $id)
 {
-$this->validate($request, [
-'name' => 'required',
-'email' => 'required|email|unique:users,email,'.$id,
-'password' => 'same:confirm-password',
-'roles' => 'required'
-]);
-$input = $request->all();
-if(!empty($input['password'])){
-$input['password'] = Hash::make($input['password']);
-}else{
-$input = array_except($input,array('password'));
-}
+  $this->validate($request, [
+    'name' => 'required',
+    'email' => 'required|email|unique:users,email,'.$id,
+    'password' => 'required|min:6|confirmed',
+    'roles' => 'required'
+  ]);
+  // $input = $request->all();
+  // if(!empty($input['password'])){
+  //   $input['password'] = Hash::make($input['password']);
+  // }else{
+  //   $input = array_except($input,array('password'));
+  // }
 $user = User::find($id);
-$user->update($input);
+$user->update([
+  'name' => $request->name,
+  'email' => $request->email,
+  'password' => Hash::make($request->password),
+  'status' => $request->status,
+  'roles_name' => $request->roles
+]);
 DB::table('model_has_roles')->where('model_id',$id)->delete();
 $user->assignRole($request->input('roles'));
 return redirect()->route('users.index')
