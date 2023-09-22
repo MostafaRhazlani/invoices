@@ -70,6 +70,8 @@ Route::post('search_invoices', [InvoicesReportsController::class, 'search_invoic
 Route::get('customers_reports', [CustomersReportsController::class, 'index']);
 Route::post('search_customers', [CustomersReportsController::class, 'search_customers'])->name('search_customers');
 
+Route::get('markAsRead_all', [InvoiceController::class, 'markAsReadAll'])->name('markAsRead_all');
+
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

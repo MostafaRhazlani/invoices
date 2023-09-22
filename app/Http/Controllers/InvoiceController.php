@@ -8,7 +8,7 @@ use App\Models\Invoice_attachments;
 use App\Models\Invoice_details;
 use App\Models\Section;
 use App\Models\User;
-use App\Notifications\EmailInvoices;
+use App\Notifications\AddNewInvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -129,8 +129,9 @@ class InvoiceController extends Controller
             $request->pic->move(public_path('Attachments/'. $invoice_number), $imageName);
 
         }
-            $user = User::first();
-            $user->notify(new EmailInvoices($invoice_id));
+            // $user = User::first();
+            $invoices = Invoice::latest()->first();
+            User::find(Auth::user()->id)->notify(new AddNewInvoice($invoices));
             session()->flash('Add');
             return redirect('/invoices');
     }
@@ -245,5 +246,14 @@ class InvoiceController extends Controller
     public function export() 
     {
         return Excel::download(new InvoiceExport, 'Invoices.xlsx');
+    }
+
+    public function markAsReadAll() {
+        $unreadAllNotifications = auth()->user()->unreadNotifications;
+
+        if ($unreadAllNotifications) {
+            $unreadAllNotifications->markAsRead();
+            return back();
+        }
     }
 }
