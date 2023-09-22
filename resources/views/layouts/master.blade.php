@@ -29,4 +29,11 @@
             	@include('layouts.footer')
 				@include('layouts.footer-scripts')	
 	</body>
+
+	<script>
+		setInterval(function() => {
+			$('#notificationCount').load(window.location.href + "#notificationCount");
+			$('#notifications').load(window.location.href + "#notifications");
+		}, 5000);
+	</script>
 </html>
